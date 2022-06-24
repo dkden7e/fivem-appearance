@@ -48,7 +48,7 @@ RegisterCommand('saveoutfit', function(source, args, raw)
 			getOutfitNames()
 		end
 
-		local appearance = client.getAppearance()
+		local appearance = exports[resName]:getAppearance()
 		outfitNames[slot] = args[2]
 		outfits[slot] = appearance
 
@@ -63,7 +63,7 @@ RegisterCommand('outfit', function(source, args, raw)
 		local appearance = getOutfit(slot)
 
 		if not appearance.model then appearance.model = 'mp_m_freemode_01' end
-		client.setPlayerAppearance(appearance)
+		exports[resName]:setPlayerAppearance(appearance)
 	end
 end)]]
 
@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
     end
 
 	function SaveOutfitMenu()
-		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'dk_saveoutfit', {
+		ESX.UI.Menu.Open('default', resName, 'dk_saveoutfit', {
 			title    = '¿Quieres guardar tu ropa actual como atuendo?',
 			align    = 'center',
 			elements = { { label = "Sí", value = "yes" }, { label = "No", value = "no" } }
@@ -155,7 +155,7 @@ Citizen.CreateThread(function()
 	
 		ESX.UI.Menu.CloseAll()
 	
-		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'karma_outfits', {
+		ESX.UI.Menu.Open('default', resName, 'karma_outfits', {
 			title    = 'Tus atuendos',
 			align    = 'bottom-left',
 			elements = elements
@@ -164,7 +164,7 @@ Citizen.CreateThread(function()
 				SaveOutfitMenu()
 			else
 				local elements = {	{ label = "Usar", value = "use_outfit" }, { label = "Eliminar", value = "del_outfit" } }
-				ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'karma_outfits2', {
+				ESX.UI.Menu.Open('default', resName, 'karma_outfits2', {
 					title    = '¿Qué quieres hacer?',
 					align    = 'bottom-left',
 					elements = elements
@@ -173,8 +173,8 @@ Citizen.CreateThread(function()
 						--if GetHashKey(data.current.value.model) == GetEntityModel(PlayerPedId()) then
 							exports['fivem-appearance']:setPedComponents(PlayerPedId(), data.current.value.components)
 							exports['fivem-appearance']:setPedProps(PlayerPedId(), data.current.value.props)
-							exports['fivem-appearance']:setPedHairAndDecorations(PlayerPedId(), data.current.value.hair, nil)
-							exports['fivem-appearance']:setPedHeadOverlays(PlayerPedId(), data.current.value.headOverlays)
+							--exports['fivem-appearance']:setPedHairAndDecorations(PlayerPedId(), data.current.value.hair, nil)
+							--exports['fivem-appearance']:setPedHeadOverlays(PlayerPedId(), data.current.value.headOverlays)
 							TriggerServerEvent('esx_skin:save', exports['fivem-appearance']:getPedAppearance(PlayerPedId()))
 							ExecuteCommand("atuendos")
 						--else
@@ -182,7 +182,7 @@ Citizen.CreateThread(function()
 						--end
 					else
 						local elements, id, name = { { label = "Confirmar (¡IRREVERSIBLE!)", value = "del_confirm" }, { label = "Cancelar", value = "del_cancel" } }, data.current.value.id, data.current.value.name
-						ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'karma_outfits3', {
+						ESX.UI.Menu.Open('default', resName, 'karma_outfits3', {
 							title    = '¿Seguro que quieres borrar el atuendo "' .. name .. '"?',
 							align    = 'bottom-left',
 							elements = elements

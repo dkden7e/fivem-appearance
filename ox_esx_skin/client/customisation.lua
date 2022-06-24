@@ -19,12 +19,12 @@ local playerAppearance
 
 local function getAppearance()
 	if not playerAppearance then
-		playerAppearance = client.getPedAppearance(PlayerPedId())
+		playerAppearance = exports[resName]:getPedAppearance(PlayerPedId())
 	end
 
 	return playerAppearance
 end
-client.getAppearance = getAppearance
+exports[resName]:getAppearance = getAppearance
 
 local function getComponentSettings(ped, componentId)
 	local drawableId = GetPedDrawableVariation(ped, componentId)
@@ -40,7 +40,7 @@ local function getComponentSettings(ped, componentId)
 		}
 	}
 end
-client.getComponentSettings = getComponentSettings
+exports[resName]:getComponentSettings = getComponentSettings
 
 local function getPropSettings(ped, propId)
 	local drawableId = GetPedPropIndex(ped, propId)
@@ -57,7 +57,7 @@ local function getPropSettings(ped, propId)
 	}
 	return settings
 end
-client.getPropSettings = getPropSettings
+exports[resName]:getPropSettings = getPropSettings
 
 local function getAppearanceSettings()
 	local playerPed = PlayerPedId()
@@ -180,10 +180,10 @@ local function getAppearanceSettings()
 		eyeColor = eyeColor,
 	}
 end
-client.getAppearanceSettings = getAppearanceSettings
+exports[resName]:getAppearanceSettings = getAppearanceSettings
 
 local config
-function client.getConfig() return config end
+function exports[resName]:getConfig() return config end
 
 local isCameraInterpolating
 local currentCamera
@@ -225,10 +225,10 @@ local function setCamera(key)
 		end
 	end
 end
-client.setCamera = setCamera
+exports[resName]:setCamera = setCamera
 
 local reverseCamera
-function client.rotateCamera(direction)
+function exports[resName]:rotateCamera(direction)
 	if not isCameraInterpolating then
 		local coords, point = table.unpack(constants.CAMERAS[currentCamera])
 		local offset = constants.OFFSETS[currentCamera]
@@ -272,16 +272,16 @@ local function pedTurnAround(ped)
 	TaskPerformSequence(ped, sequenceTaskId)
 	ClearSequenceTask(sequenceTaskId)
 end
-client.pedTurnAround = pedTurnAround
+exports[resName]:pedTurnAround = pedTurnAround
 
 local playerHeading
-function client.getHeading() return playerHeading end
+function exports[resName]:getHeading() return playerHeading end
 
 local toggleRadar = GetConvarInt('fivem-appearance:radar', 1) == 1
 local callback
-function client.startPlayerCustomization(cb, _config)
+function exports[resName]:startPlayerCustomization(cb, _config)
 	local playerPed = PlayerPedId()
-	playerAppearance = client.getPedAppearance(playerPed)
+	playerAppearance = exports[resName]:getPedAppearance(playerPed)
 	playerCoords = GetEntityCoords(playerPed, true)
 	playerHeading = GetEntityHeading(playerPed)
 	open = true
@@ -306,7 +306,7 @@ function client.startPlayerCustomization(cb, _config)
 	}))
 end
 
-function client.exitPlayerCustomization(appearance)
+function exports[resName]:exitPlayerCustomization(appearance)
 	RenderScriptCams(false, false, 0, true, true)
 	DestroyCam(cameraHandle, false)
 	SetNuiFocus(false, false)
@@ -324,7 +324,7 @@ function client.exitPlayerCustomization(appearance)
 	}))
 
 	if not appearance then
-		client.setPlayerAppearance(getAppearance())
+		exports[resName]:setPlayerAppearance(getAppearance())
 	end
 
 	if callback then
@@ -344,10 +344,10 @@ function client.exitPlayerCustomization(appearance)
 end
 
 AddEventHandler('onResourceStop', function(resource)
-	if resource == GetCurrentResourceName() then
+	if resource == resName then
 		SetNuiFocus(false, false)
 		SetNuiFocusKeepInput(false)
 	end
 end)
 
-exports('startPlayerCustomization', client.startPlayerCustomization)
+exports('startPlayerCustomization', exports[resName]:startPlayerCustomization)

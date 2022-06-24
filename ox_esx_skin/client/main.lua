@@ -1,20 +1,22 @@
+resName = GetCurrentResourceName()
+
 if GetResourceState('es_extended'):find('start') then
 	ESX = true
 
 	AddEventHandler('skinchanger:loadDefaultModel', function(male, cb)
-		client.setPlayerModel(male and `mp_m_freemode_01` or `mp_f_freemode_01`)
+		exports[resName]:setPlayerModel(male and `mp_m_freemode_01` or `mp_f_freemode_01`)
 		if cb then cb() end
 	end)
 
 	AddEventHandler('skinchanger:loadSkin', function(skin, cb)
 		if not skin.model then skin.model = 'mp_m_freemode_01' end
-		client.setPlayerAppearance(skin)
+		exports[resName]:setPlayerAppearance(skin)
 		if cb then cb() end
 	end)
 
 	RegisterNetEvent('esx_skin:openSaveableMenu')
 	AddEventHandler('esx_skin:openSaveableMenu', function(submitCb, cancelCb)
-		client.startPlayerCustomization(function (appearance)
+		exports[resName]:startPlayerCustomization(function (appearance)
 			if (appearance) then
 				TriggerServerEvent('esx_skin:save', appearance)
 				if submitCb then submitCb() end
@@ -182,7 +184,7 @@ local function getClosestShop(currentShop, coords)
 					canSaveOutfit = true
 					DrawMarker(20, currentShop.xyz, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.3, 0.3, 0, 255, 0, 200, false, false, 2, true, nil, nil, false)
 					if IsControlJustReleased(0, 38) then
-						client.startPlayerCustomization(function(appearance)
+						exports[resName]:startPlayerCustomization(function(appearance)
 							if (appearance) then
 								if ESX then
 									TriggerServerEvent('esx_skin:save', appearance)
