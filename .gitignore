@@ -9,3 +9,5 @@ game/yarn.lock
 web/node_modules/
 web/dist/
 web/yarn.lock
+/temp/
+Generar resource.sh
