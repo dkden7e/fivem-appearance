@@ -82,14 +82,14 @@ const HeadOverlays = ({
           clientValue={storedData.hair.style}
           onChange={value => handleHairChange('style', value)}
         />
-        {!automaticFade && <Input
+        <Input
           title={locales.headOverlays.hair.fade}
           min={0}
           max={settings?.fade?.length - 1 ?? 0}
           defaultValue={fadeValue}
           clientValue={storedFadeValue}
           onChange={value => handleChangeFade(value)}
-        />}
+        />
         <ColorInput
           title={locales.headOverlays.hair.color}
           colors={settings.hair.color.items}
